@@ -1,0 +1,28 @@
+import numpy as np
+import cv2
+
+# Load the image
+image = cv2.imread('somesh.jpeg', 0)  # Load as grayscale
+
+# Smoothing (using average filter)
+def smooth(image, kernel_size):
+    kernel = np.ones((kernel_size, kernel_size), np.float32) / (kernel_size * kernel_size)
+    smoothed = cv2.filter2D(image, -1, kernel)
+    return smoothed
+
+smoothed_image = smooth(image, 3)  # Kernel size 3x3
+
+# Sharpening (using Laplacian filter)
+def sharpen(image, alpha=1.5, beta=-0.5):
+    blurred = cv2.GaussianBlur(image, (3, 3), 0)
+    sharpened = cv2.addWeighted(image, alpha, blurred, beta, 0)
+    return sharpened
+
+sharpened_image = sharpen(image)
+
+# Display the results
+cv2.imshow('Original Image', image)
+cv2.imshow('Smoothed Image', smoothed_image)
+cv2.imshow('Sharpened Image', sharpened_image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
